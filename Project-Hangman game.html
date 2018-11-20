@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Project Hangman</title>
+</head>
+
+<body>
+    <div ng-app="app" ng-controller="ctrl">
+        <h2>HANGMAN</h2>
+        <div ng-show="screen==inputscreen">
+            <h3>Player 1
+                <br>
+                <br> Enter The Word To Be Guessed </h3>
+            <br>
+            <input type="text" ng-model="player1" ng-change="player1 = (player1 | uppercase)" />
+            <input type="button" value="Word To Guess" ng-click="wordtoguess()" />
+        </div>
+        <div ng-show="screen==inputscreen1">
+            <h3>Player 2
+                <br>
+                <br> Guess The Word</h3>
+            {{m}} of {{n}} chances remaining
+            <br>
+            <table border="1">
+                <div>
+                    <td ng-repeat="obj in lists track by $index">
+                        {{obj}}
+                    </td>
+                </div>
+            </table>
+            Enter The Letter To Guess
+            <br>
+            <input type="text" ng-model="player2" maxlength="1" ng-change="player2 = (player2 | uppercase)" />
+            <input type="button" value="Guess" ng-click="guess()" />
+            <table border="1">
+                <div>
+                    <td ng-repeat="x in alphabates track by $index">
+                        {{x}}
+                    </td>
+                </div>
+            </table>
+        </div>
+        <div ng-show="screen==inputscreen2">
+            <h3>Player 2
+                <br>
+                <br> Guess The Word</h3>
+            {{m}} of {{n}} chances remaining
+            <br>
+            <table border="1">
+                <div>
+                    <td ng-repeat="obj in lists track by $index">
+                        {{obj}}
+                    </td>
+                </div>
+            </table>
+            Enter The Letter To Guess
+            <br>
+            <input type="text" ng-model="player2" maxlength="1" ng-change="player2 = (player2 | uppercase)" />
+            <input type="button" value="Guess" ng-click="guess()" />
+            <table border="1">
+                <div>
+                    <td ng-repeat="x in alphabates track by $index">
+                        {{x}}
+                    </td>
+                </div>
+            </table>
+            {{win}} {{lose}}
+            <br>
+            <a href="" ng-click="fn()">Play Another Game</a>
+            <br>
+            <br>
+        </div>
+    </div>
+    <script>
+        var v1 = angular.module("app", []);
+        v1.controller("ctrl", function ($scope) {
+            $scope.screen = 0;
+            $scope.inputscreen = 1;
+            $scope.inputscreen1 = 2;
+            $scope.inputscreen2 = 3;
+            $scope.screen = $scope.inputscreen;
+            $scope.n = 9;
+            $scope.m = 9
+            $scope.wordtoguess = function () {
+                $scope.alphabates = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "k", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+                $scope.screen = $scope.inputscreen1;
+                $scope.lists = [];
+                for (i = 0; i < $scope.player1.length; i++) {
+                    $scope.lists.push("_");
+                }
+                $scope.guess = function () {
+                    $scope.wordGuessCorrectly = false;
+                    $scope.y = false;
+                    for (i = 0; i < $scope.alphabates.length; i++) {
+                        if ($scope.player2 == $scope.alphabates[i]) {
+                            $scope.alphabates[i] = "_";
+                            $scope.alphabates.indexOf($scope.player2) == -1;
+                            $scope.y = true;
+                        }
+                    }
+                    for (i = 0; i < $scope.lists.length; i++) {
+                        if ($scope.player2 == $scope.player1[i]) {
+                            $scope.wordGuessCorrectly = true;
+                            $scope.lists[i] = $scope.player1[i];
+                        }
+                    }
+                    if (!$scope.wordGuessCorrectly && $scope.y)
+                        $scope.m--;
+                    $scope.player2 = "";
+                    if ($scope.m == 0) {
+                        $scope.lose = "OHO! You lose the Game and the word is " + $scope.player1;
+                        $scope.screen = $scope.inputscreen2;
+                    }
+                    if ($scope.lists.indexOf("_") == -1) {
+                        $scope.win = "Congrates! You Won The Game";
+                        $scope.screen = $scope.inputscreen2;
+                    }
+                }
+                $scope.fn = function () {
+                    $scope.screen = $scope.inputscreen;
+                    $scope.player1 = "";
+                    $scope.m = 9;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
